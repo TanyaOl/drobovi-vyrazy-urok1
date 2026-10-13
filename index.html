@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Дробові вирази: підготовка до контрольної</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F8FC;--grid:#DDE6F4;--card:#FFFFFF;--soft:#EEF3FC;--line:#C7D3E8;
+  --ink:#1B2F7A;--text:#1D2433;--muted:#58637D;--red:#C62F2F;--green:#1B7F55;
+  --blue:#2F5BD8;--orange:#D9730D;--mark:#FFE98A;--markfg:#1D2433;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#131929;--grid:#1D2640;--card:#1A2137;--soft:#222B47;--line:#33405F;
+    --ink:#A9BCFF;--text:#E7EBF6;--muted:#9BA7C6;--red:#FF8080;--green:#5FD3A0;
+    --blue:#86A3FF;--orange:#FFA24D;--mark:#6A5712;--markfg:#F4EFD8;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131929;--grid:#1D2640;--card:#1A2137;--soft:#222B47;--line:#33405F;
+  --ink:#A9BCFF;--text:#E7EBF6;--muted:#9BA7C6;--red:#FF8080;--green:#5FD3A0;
+  --blue:#86A3FF;--orange:#FFA24D;--mark:#6A5712;--markfg:#F4EFD8;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background-color:var(--paper);color:var(--text);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;font-family:'Nunito',system-ui,sans-serif;font-size:17px;line-height:1.6}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+.top{padding:22px 24px 14px;max-width:1180px;margin:0 auto}
+.top h1{font-family:'Caveat',cursive;font-weight:700;font-size:46px;line-height:1.05;margin:0;color:var(--ink)}
+.top .sub{margin:2px 0 10px;color:var(--muted)}
+.prog{display:flex;align-items:center;gap:12px;max-width:420px}
+.bar{flex:1;height:10px;border-radius:6px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--green);transition:width .4s}
+#ptxt{font-weight:800;color:var(--green);white-space:nowrap}
+
+.app{display:grid;grid-template-columns:262px 1fr;gap:22px;max-width:1180px;margin:0 auto;padding:0 24px 60px;align-items:start}
+nav{position:sticky;top:12px;display:flex;flex-direction:column;gap:4px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:8px}
+nav button{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;background:none;border:none;border-left:4px solid transparent;border-radius:8px;padding:8px 10px;font-weight:600}
+nav button:hover{background:var(--soft)}
+nav button.on{background:var(--soft);border-left-color:var(--red);font-weight:800;color:var(--ink)}
+nav .ck{color:var(--green);font-weight:800;min-width:1em}
+
+.sheet{background:var(--card);border:1.5px solid var(--line);border-left:4px solid var(--red);border-radius:14px;padding:26px 30px 30px;min-width:0}
+.sheet h2{font-family:'Caveat',cursive;font-weight:700;font-size:38px;line-height:1.1;color:var(--ink);margin:0 0 14px}
+.sheet h3{font-size:19px;font-weight:800;margin:30px 0 10px;color:var(--ink)}
+.task{background:var(--soft);border-radius:10px;padding:14px 18px;margin:0 0 6px;font-size:18px}
+.task .t0{font-weight:800;display:block;margin-bottom:6px}
+.task .it{display:inline-block;margin:4px 22px 4px 0}
+p{margin:.5em 0}
+.bul{margin:.4em 0;padding-left:1.3em}
+.bul li{margin:.3em 0}
+
+/* math */
+.m{font-family:'Cambria Math','STIX Two Math','Times New Roman',Georgia,serif;font-size:1.12em;white-space:nowrap}
+.m i{font-style:italic}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .15em;font-size:.95em;line-height:1.25}
+.fr>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .3em .08em}
+.fr>span:last-child{padding:.08em .3em 0}
+sup{font-size:.68em;line-height:0;vertical-align:super}
+.cut{color:var(--red);text-decoration:line-through}
+.add{color:var(--blue);font-weight:800}
+
+/* rules */
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:12px 0}
+.rule{border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--soft)}
+.rule b{display:block;color:var(--ink);margin-bottom:4px}
+.rule span{font-size:15.5px}
+.formulas{list-style:none;padding:0;margin:8px 0;display:grid;gap:8px}
+.formulas li{background:var(--soft);border-radius:10px;padding:8px 14px}
+.formulas small{color:var(--muted);margin-left:8px}
+
+/* steps */
+.steps{list-style:none;counter-reset:s;margin:0;padding:0}
+.step{counter-increment:s;position:relative;padding:8px 0 8px 44px;border-bottom:1px dashed var(--line)}
+.step::before{content:counter(s);position:absolute;left:0;top:9px;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--card);font-weight:800;display:grid;place-items:center;font-size:15px}
+.step.hid{display:none}
+.step.fresh{animation:pop .45s}
+@keyframes pop{from{background:var(--mark)}to{background:transparent}}
+.btn{background:var(--ink);color:var(--card);border:none;border-radius:10px;padding:10px 18px;font-weight:800;margin:10px 10px 0 0}
+.btn.ghost{background:none;color:var(--ink);border:1.5px solid var(--line)}
+.btn:hover{filter:brightness(1.1)}
+.answer{margin-top:14px;border:2px solid var(--green);border-radius:12px;padding:12px 18px;background:var(--soft)}
+.answer b{color:var(--green)}
+
+.callout{border-radius:12px;padding:12px 16px;margin-top:6px}
+.callout.err{border-left:5px solid var(--red);background:var(--soft)}
+.callout.err b{color:var(--red)}
+
+/* widgets */
+.viz{border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0;background:var(--card)}
+.viz>.vt{font-weight:800;margin-bottom:8px}
+.svg{width:100%;height:auto;display:block}
+.axis{stroke:var(--text);stroke-width:2}
+.tick{stroke:var(--text);stroke-width:1.5}
+.gridl{stroke:var(--line);stroke-width:1}
+.lab{fill:var(--muted);font:700 12px 'Nunito',sans-serif;text-anchor:middle}
+.lab.red{fill:var(--red)}
+.hole{fill:var(--card);stroke:var(--red);stroke-width:3}
+.mk{fill:var(--blue)}
+.mk.bad{fill:var(--red)}
+.curve{stroke:var(--ink);stroke-width:3;fill:none}
+.dist{stroke:var(--orange);stroke-width:4;fill:none}
+.dlab{fill:var(--orange);font:800 14px 'Nunito',sans-serif;text-anchor:middle}
+.srow{display:flex;align-items:center;gap:12px;margin:6px 0}
+.srow input[type=range]{flex:1;max-width:340px;accent-color:var(--blue)}
+.srow b{min-width:3.5em}
+.info{margin-top:8px}
+.ok{color:var(--green);font-weight:800}
+.bad{color:var(--red);font-weight:800}
+.vrow{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--soft);border-radius:8px;padding:6px 14px;margin:6px 0}
+.vrow b{font-size:20px}
+.verdict{margin-top:8px;font-weight:800}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.tab{background:none;border:1.5px solid var(--line);border-radius:8px;padding:4px 12px;font-weight:700}
+.tab.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.bigfr{font-size:26px;margin:6px 0}
+.note{color:var(--muted);margin:.3em 0}
+.cf{display:inline-flex;flex-direction:column;align-items:center;margin:10px 0;gap:6px;max-width:100%}
+.cfrow{display:flex;align-items:center;gap:4px;flex-wrap:wrap;justify-content:center}
+.cfline{align-self:stretch;border-top:2.5px solid var(--text)}
+.dot{color:var(--muted)}
+.chip{background:var(--soft);border:2px solid var(--line);border-radius:10px;padding:2px 12px;font-size:20px;min-width:44px}
+.chip:hover{border-color:var(--blue)}
+.chip.sel{border-color:var(--blue);background:var(--mark);color:var(--markfg)}
+.chip.gone{text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:3px;opacity:.4;pointer-events:none}
+.msg{margin:.3em 0;font-weight:700}
+.clsrow{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.clsx{min-width:130px;font-size:20px}
+.clsrow button{background:var(--soft);border:1.5px solid var(--line);border-radius:8px;padding:4px 14px;font-weight:700}
+.clsrow button.good{background:var(--green);color:#fff;border-color:var(--green)}
+.clsrow button.badb{background:var(--red);color:#fff;border-color:var(--red)}
+.cells{display:flex;gap:4px;margin:10px 0;flex-wrap:wrap}
+.cell{width:38px;height:44px;border-radius:6px;border:2px solid var(--line)}
+.cell.c1{background:var(--blue);border-color:var(--blue)}
+.cell.c2{background:var(--orange);border-color:var(--orange)}
+.legend{font-size:15px;color:var(--muted)}
+
+/* practice */
+.q{border-top:1px dashed var(--line);padding:14px 0}
+.qt{font-weight:800;font-size:18px}
+.opts{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}
+.opt{background:var(--soft);border:2px solid var(--line);border-radius:10px;padding:8px 16px;font-size:18px}
+.opt:hover{border-color:var(--blue)}
+.opt.good{background:var(--green);border-color:var(--green);color:#fff}
+.opt.bad{opacity:.5;text-decoration:line-through;color:var(--text);font-weight:400}
+.fb{font-weight:700}
+.fb.good{color:var(--green)}
+.fb.bad{color:var(--red);font-weight:700}
+.nextrow{margin-top:24px;display:flex;justify-content:flex-end}
+.key{width:100%;border-collapse:collapse}
+.key td{border-bottom:1px dashed var(--line);padding:8px 6px;vertical-align:top}
+.key td:first-child{font-weight:800;white-space:nowrap}
+
+@media (max-width:860px){
+  .app{grid-template-columns:1fr;padding:0 12px 40px}
+  .top{padding:16px 14px 10px}
+  .top h1{font-size:38px}
+  nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;flex-direction:row;overflow-x:auto;border-radius:12px;padding:6px;margin-bottom:0}
+  nav button{white-space:nowrap;border-left:none;border-bottom:4px solid transparent;border-radius:8px}
+  nav button.on{border-bottom-color:var(--red)}
+  .sheet{padding:18px 16px 24px}
+  .sheet h2{font-size:32px}
+}
+@media (prefers-reduced-motion:reduce){.step.fresh{animation:none}.bar i{transition:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>Дробові вирази</h1>
+  <p class="sub">Підготовка до контрольної, §§ 1–4. Проходь по одному завданню: прочитай, розбери, побач, спробуй сам.</p>
+  <div class="prog"><div class="bar"><i id="barfill"></i></div><span id="ptxt"></span></div>
+</header>
+<div class="app">
+  <nav id="nav" aria-label="Завдання"></nav>
+  <main id="main"></main>
+</div>
+
+<script>
+const NS='http://www.w3.org/2000/svg';
+const $=s=>document.querySelector(s);
+const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;};
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+
+/* ---------- mini math renderer: {{num|den}}, ^2, ~math~ ---------- */
+const it=s=>s.split(/(<[^>]+>)/).map(p=>p[0]==='<'?p:p.replace(/[a-zA-Z]/g,'<i>$&</i>')).join('');
+const M=s=>{
+  s=s.replace(/\^(\d|[a-z])/g,'<sup>$1</sup>');
+  s=s.replace(/\{\{([^{}|]*)\|([^{}]*)\}\}/g,'<span class="fr"><span>$1</span><span>$2</span></span>');
+  return it(s);
+};
+const T=s=>s.replace(/~([^~]+)~/g,(_,m)=>'<span class="m">'+M(m)+'</span>');
+const fmt=n=>String(Math.round(n*10000)/10000).replace('.',',').replace('-','−');
+const D=(a,b)=>{if(Math.abs(b)<1e-9)throw new Error('zero');return a/b;};
+
+/* ---------- progress ---------- */
+let prog={};
+try{prog=JSON.parse(localStorage.getItem('frac-prog')||'{}');}catch(e){prog={};}
+const saveProg=()=>{try{localStorage.setItem('frac-prog',JSON.stringify(prog));}catch(e){}};
+
+/* ================= WIDGETS ================= */
+
+function wClassify(){
+  const items=[
+    {e:'{{1|3}}a^2b',a:'whole',why:'Під рискою лише число 3.'},
+    {e:'{{x−y|x}}',a:'frac',why:'Під рискою літера x.'},
+    {e:'{{c+2|9}}',a:'whole',why:'Під рискою лише число 9, а літера c стоїть у чисельнику.'},
+    {e:'p^2−p−19',a:'whole',why:'Рисок немає зовсім, тож знаменника з літерою теж немає.'}
+  ];
+  const w=el('div');
+  items.forEach((o,i)=>{
+    const row=el('div','clsrow');
+    row.append(el('div','clsx',T('~'+(i+1)+') '+o.e+'~')));
+    const fb=el('span','');
+    const bw=el('button','','Цілий'), bf=el('button','','Дробовий');
+    const pick=(btn,val)=>{
+      if(val===o.a){btn.classList.add('good');fb.className='ok';fb.innerHTML='Так! '+T(o.why);bw.disabled=bf.disabled=true;}
+      else{btn.classList.add('badb');fb.className='bad';fb.textContent='Ні. Подивись, що стоїть під рискою.';}
+    };
+    bw.onclick=()=>pick(bw,'whole');bf.onclick=()=>pick(bf,'frac');
+    row.append(bw,bf,fb);w.append(row);
+  });
+  return w;
+}
+
+function wTrap(){
+  const w=el('div');
+  w.append(el('p','',T('Візьмемо ~{{2+6|2}}~. Чесно порахуємо: ~8:2=4~.')));
+  const r=el('p','msg');
+  const b=el('button','btn','Спробувати «скоротити» двійки');
+  b.onclick=()=>{r.className='msg bad';r.innerHTML=T('Викреслили 2 зверху й знизу, лишилось ~6~. Але правильна відповідь ~4~. Виходить неправда, тому доданки скорочувати не можна!');};
+  const b2=el('button','btn ghost','А якщо множники?');
+  b2.onclick=()=>{r.className='msg ok';r.innerHTML=T('~{{2·6|2·3}}={{12|6}}=2~. Скоротили двійки: ~{{6|3}}=2~. Збіглось, бо 2 тут множник.');};
+  w.append(b,b2,r);return w;
+}
+
+function wCancel(cases){
+  const wrap=el('div'),tabs=el('div','tabs'),body=el('div');wrap.append(tabs,body);
+  let cur=0;const S=cases.map(()=>({x:new Set(),sel:null,fac:false,msg:'',mc:''}));
+  const rem=(c,s,side)=>c[side].map((f,i)=>({f,i})).filter(o=>!s.x.has(side[0]+o.i));
+  const can=(c,s)=>rem(c,s,'num').some(a=>rem(c,s,'den').some(b=>b.f===a.f));
+  function click(c,s,side,i,key){
+    if(s.x.has(key))return;
+    if(!s.sel){s.sel={side,i,key};s.msg='';}
+    else if(s.sel.key===key){s.sel=null;}
+    else if(s.sel.side===side){s.sel={side,i,key};}
+    else{
+      const a=c[s.sel.side][s.sel.i],b=c[side][i];
+      if(a===b){s.x.add(s.sel.key);s.x.add(key);s.msg='Скоротили '+T('~'+a+'~')+' зверху й знизу.';s.mc='ok';}
+      else{s.msg='Це різні множники, їх скорочувати не можна.';s.mc='bad';}
+      s.sel=null;
+    }
+    draw();
+  }
+  function draw(){
+    tabs.innerHTML='';
+    cases.forEach((c,i)=>{const b=el('button','tab'+(i===cur?' on':''),T(c.label));b.onclick=()=>{cur=i;draw();};tabs.append(b);});
+    body.innerHTML='';
+    const c=cases[cur],s=S[cur];
+    body.append(el('div','bigfr',T('~'+c.raw+'~')));
+    if(c.factor&&!s.fac){
+      const b=el('button','btn','Крок 1. Розкласти на множники');
+      b.onclick=()=>{s.fac=true;draw();};body.append(b);return;
+    }
+    if(c.factor)body.append(el('p','note',T(c.factor)));
+    body.append(el('p','note','Крок 2. Натисни множник зверху, а потім такий самий знизу.'));
+    const box=el('div','cf');
+    ['num','den'].forEach((side,si)=>{
+      const row=el('div','cfrow');
+      c[side].forEach((f,i)=>{
+        const key=side[0]+i;
+        const b=el('button','chip'+(s.x.has(key)?' gone':'')+(s.sel&&s.sel.key===key?' sel':''),T('~'+f+'~'));
+        b.onclick=()=>click(c,s,side,i,key);row.append(b);
+        if(i<c[side].length-1)row.append(el('span','dot','·'));
+      });
+      box.append(row);if(si===0)box.append(el('div','cfline'));
+    });
+    body.append(box);
+    if(s.msg)body.append(el('p','msg '+s.mc,s.msg));
+    if(!can(c,s)){
+      const n=rem(c,s,'num').map(o=>o.f).join('')||'1';
+      const d=rem(c,s,'den').map(o=>o.f).join('');
+      const res=d?'{{'+n+'|'+d+'}}':n;
+      body.append(el('p','msg ok',T('Скорочувати більше нічого. Результат: ~'+res+'~')));
+    }
+    const r=el('button','btn ghost','Почати спочатку');
+    r.onclick=()=>{s.x=new Set();s.sel=null;s.msg='';draw();};body.append(r);
+  }
+  draw();return wrap;
+}
+
+function wVerify(o){
+  const w=el('div'),vals={},sl=el('div'),out=el('div'),ver=el('div','verdict');
+  const outs=[];
+  o.vars.forEach(v=>{
+    vals[v.n]=v.v;
+    const row=el('label','srow'),val=el('b');
+    const inp=document.createElement('input');
+    inp.type='range';inp.min=v.min;inp.max=v.max;inp.step=v.step||1;inp.value=v.v;
+    inp.oninput=()=>{vals[v.n]=+inp.value;upd();};
+    row.append(el('span','',T('~'+v.n+'~')),inp,val);sl.append(row);outs.push([val,v.n]);
+  });
+  w.append(sl,out,ver);
+  function upd(){
+    outs.forEach(([val,n])=>val.textContent='= '+fmt(vals[n]));
+    const rs=o.rows.map(r=>{try{return r.f(vals);}catch(e){return null;}});
+    out.innerHTML=o.rows.map((r,i)=>'<div class="vrow"><span>'+T(r.t)+'</span><b class="'+(rs[i]===null?'bad':'')+'">'+(rs[i]===null?'не існує (ділення на 0)':fmt(rs[i]))+'</b></div>').join('');
+    let cls,txt;
+    if(o.verdict){[cls,txt]=o.verdict(rs);}
+    else if(rs.some(x=>x===null)){cls='bad';txt='При таких значеннях знаменник дорівнює 0. Цього значення тут бути не може.';}
+    else if(rs.every(x=>Math.abs(x-rs[0])<1e-9)){cls='ok';txt='Числа збігаються ✓. Спрощення правильне.';}
+    else{cls='bad';txt='Числа різні ✗. Десь у розв’язанні помилка.';}
+    ver.className='verdict '+cls;ver.innerHTML=txt;
+  }
+  upd();return w;
+}
+
+function wBars(){
+  const w=el('div');let n=9,a=7,b=2;
+  const cells=el('div','cells'),cap=el('div','info');
+  const mk=(name,min,max,get,set)=>{
+    const row=el('label','srow'),val=el('b');
+    const inp=document.createElement('input');inp.type='range';inp.min=min;inp.max=max;inp.step=1;inp.value=get();
+    inp.oninput=()=>{set(+inp.value);draw();};
+    row.append(el('span','',T('~'+name+'~')),inp,val);return {row,inp,val};
+  };
+  const sn=mk('n',3,12,()=>n,v=>n=v),sa=mk('a',1,12,()=>a,v=>a=v),sb=mk('b',0,12,()=>b,v=>b=v);
+  w.append(sn.row,sa.row,sb.row,cells,cap,el('p','legend','Синє: a−b клітинок. Помаранчеве: b клітинок. Разом a клітинок з n.'));
+  function draw(){
+    if(a>n)a=n;if(b>a)b=a;
+    sa.inp.max=n;sb.inp.max=a;sa.inp.value=a;sb.inp.value=b;
+    sn.val.textContent='= '+n;sa.val.textContent='= '+a;sb.val.textContent='= '+b;
+    cells.innerHTML='';
+    for(let i=0;i<n;i++)cells.append(el('div','cell '+(i<a-b?'c1':i<a?'c2':'')));
+    cap.innerHTML=T('~{{'+(a-b)+'|'+n+'}}+{{'+b+'|'+n+'}}={{'+a+'|'+n+'}}~')+' — знаменник '+n+' лишився тим самим, склали тільки чисельники.';
+  }
+  draw();return w;
+}
+
+function wLine(o){
+  const w=el('div');let x=o.start,show=false;
+  const W=640,H=130,pad=26,lo=o.lo,hi=o.hi,X=v=>pad+(v-lo)/(hi-lo)*(W-2*pad);
+  const L=v=>(v<0?'−'+(-v):''+v);
+  const svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox','0 0 '+W+' '+H);svg.setAttribute('class','svg');
+  const info=el('div','info');
+  const row=el('label','srow'),val=el('b');
+  const inp=document.createElement('input');inp.type='range';inp.min=lo;inp.max=hi;inp.step=1;inp.value=x;
+  inp.oninput=()=>{x=+inp.value;draw();};
+  row.append(el('span','',T('~x~')),inp,val);
+  const tg=el('button','btn ghost','Показати заборонені точки');
+  tg.onclick=()=>{show=!show;tg.textContent=show?'Сховати заборонені точки':'Показати заборонені точки';draw();};
+  w.append(row,svg,info,tg);
+  function draw(){
+    val.textContent='= '+L(x);
+    let g='<line class="axis" x1="'+X(lo)+'" y1="75" x2="'+X(hi)+'" y2="75"/>';
+    for(let t=lo;t<=hi;t++){
+      g+='<line class="tick" x1="'+X(t)+'" y1="69" x2="'+X(t)+'" y2="81"/>';
+      if((hi-lo)<=14||t%2===0)g+='<text class="lab" x="'+X(t)+'" y="98">'+L(t)+'</text>';
+    }
+    if(o.center!=null){
+      const a=X(o.center),b=X(x);
+      g+='<circle cx="'+a+'" cy="75" r="4" fill="var(--orange)"/>';
+      g+='<path class="dist" d="M'+a+' 46 V38 H'+b+' V46"/>';
+      g+='<text class="dlab" x="'+((a+b)/2)+'" y="30">відстань до '+L(o.center)+': '+Math.abs(x-o.center)+'</text>';
+    }
+    const bad=o.dens.some(d=>Math.abs(d.f(x))<1e-9);
+    if(show)o.forb.forEach(p=>{
+      g+='<circle class="hole" cx="'+X(p)+'" cy="75" r="9"/><text class="lab red" x="'+X(p)+'" y="122">'+L(p)+'</text>';
+    });
+    g+='<circle class="mk'+(bad?' bad':'')+'" cx="'+X(x)+'" cy="75" r="7"/>';
+    svg.innerHTML=g;
+    let h=o.dens.map(d=>'<div class="'+(Math.abs(d.f(x))<1e-9?'bad':'ok')+'">'+T('Знаменник ~'+d.t+'~ = '+fmt(d.f(x)))+'</div>').join('');
+    if(o.numer){
+      const nv=o.numer.f(x);
+      h+='<div>'+T('Чисельник ~'+o.numer.t+'~ = '+fmt(nv))+'</div>';
+    }
+    if(bad)h+='<div class="bad">Знаменник дорівнює 0, тож таке x заборонене.</div>';
+    else if(o.numer&&Math.abs(o.numer.f(x))<1e-9)h+='<div class="ok">Чисельник дорівнює 0, а знаменник ні. Дріб дорівнює нулю!</div>';
+    else h+='<div class="ok">Знаменник не нуль, тож це x допустиме.</div>';
+    info.innerHTML=h;
+  }
+  draw();return w;
+}
+
+function wGraph(){
+  const W=640,H=300,u=34,cx=320,cy=150,X=v=>cx+v*u,Y=v=>cy-v*u;
+  const w=el('div');let x=-4;
+  const svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox','0 0 '+W+' '+H);svg.setAttribute('class','svg');
+  const info=el('div','info'),row=el('label','srow'),val=el('b');
+  const inp=document.createElement('input');inp.type='range';inp.min=-8;inp.max=8;inp.step=0.5;inp.value=x;
+  inp.oninput=()=>{x=+inp.value;draw();};
+  row.append(el('span','',T('~x~')),inp,val);w.append(row,svg,info);
+  const L=v=>(v<0?'−'+(-v):''+v);
+  function draw(){
+    val.textContent='= '+fmt(x);
+    let g='';
+    for(let i=-9;i<=9;i++)g+='<line class="gridl" x1="'+X(i)+'" y1="0" x2="'+X(i)+'" y2="'+H+'"/>';
+    for(let j=-4;j<=4;j++)g+='<line class="gridl" x1="0" y1="'+Y(j)+'" x2="'+W+'" y2="'+Y(j)+'"/>';
+    g+='<line class="axis" x1="0" y1="'+cy+'" x2="'+W+'" y2="'+cy+'"/><line class="axis" x1="'+cx+'" y1="0" x2="'+cx+'" y2="'+H+'"/>';
+    for(let i=-8;i<=8;i+=2)if(i)g+='<text class="lab" x="'+X(i)+'" y="'+(cy+16)+'">'+L(i)+'</text>';
+    for(let j=-4;j<=4;j+=2)if(j)g+='<text class="lab" x="'+(cx-12)+'" y="'+(Y(j)+4)+'">'+L(j)+'</text>';
+    g+='<text class="lab" x="'+(W-10)+'" y="'+(cy-8)+'">x</text><text class="lab" x="'+(cx+12)+'" y="12">y</text>';
+    g+='<line class="curve" x1="'+X(-8)+'" y1="'+Y(2)+'" x2="'+X(8)+'" y2="'+Y(-2)+'"/>';
+    g+='<circle class="hole" cx="'+X(4)+'" cy="'+Y(-1)+'" r="6"/>';
+    const nu=x*x-4*x,de=16-4*x;
+    let t;
+    if(Math.abs(de)<1e-9){
+      t='<div class="bad">'+T('Знаменник ~16−4·4=0~, чисельник теж ~0~. Вийшло «0 на 0»: у цій точці функції немає (на графіку кільце).')+'</div>';
+    }else{
+      const y=nu/de;
+      g+='<circle class="mk" cx="'+X(x)+'" cy="'+Y(y)+'" r="7"/>';
+      t='<div>'+T('Чисельник ~x^2−4x~ = '+fmt(nu)+'; знаменник ~16−4x~ = '+fmt(de))+'</div><div class="ok">'+T('~y~ = '+fmt(nu)+' : '+fmt(de)+' = '+fmt(y)+'. Точка лежить на прямій.')+'</div>';
+    }
+    svg.innerHTML=g;info.innerHTML=t;
+  }
+  draw();return w;
+}
+
+/* ================= LESSONS ================= */
+const LESSONS=[
+{id:'start',nav:'Старт: 4 правила',title:'Спершу — 4 правила, на яких тримається все',
+ idea:`<p>Дробовий вираз — це дріб, у якого <b>під рискою є літера</b>. Усі дії з ним тримаються на чотирьох правилах. Вивчи їх, і половина контрольної вже в кишені.</p>
+<div class="rules">
+<div class="rule"><b>1. На нуль ділити не можна</b><span>Знаменник ніколи не дорівнює 0. Тому з літерами завжди питаємо: «при яких значеннях літери знаменник став би нулем?»</span></div>
+<div class="rule"><b>2. Скорочуємо тільки множники</b><span>Те, що множиться, скоротити можна. Те, що додається чи віднімається, — ні.</span></div>
+<div class="rule"><b>3. Додаємо лише з однаковим знаменником</b><span>Знаменники різні? Спочатку зводимо до спільного.</span></div>
+<div class="rule"><b>4. Дужки-дзеркала</b><span>~b−a=−(a−b)~. Помінялись місцями — змінився знак.</span></div>
+</div>
+<h3>Три формули, які знадобляться майже в кожному завданні</h3>
+<ul class="formulas">
+<li>~ax+ay=a(x+y)~<small>винести спільний множник за дужку</small></li>
+<li>~a^2−b^2=(a−b)(a+b)~<small>різниця квадратів</small></li>
+<li>~a^2+2ab+b^2=(a+b)^2~<small>квадрат суми</small></li>
+</ul>`,
+ steps:[],
+ widgets:[{t:'Чому не можна скорочувати доданки?',f:wTrap}],
+ mistake:`Дивись, що саме викреслюєш: у ~{{2+6|2}}~ двійка зверху є <b>доданком</b>, а не множником. Спочатку розклади на множники, а вже тоді скорочуй.`,
+ practice:[
+  {q:'У якому дробі скорочення дозволене?',o:['~{{2(a+1)|3(a+1)}}~','~{{2+a|3+a}}~','~{{a+5|5}}~','~{{x−4|x}}~'],c:0,why:'Дужка ~(a+1)~ — спільний множник зверху й знизу.',hint:'Скорочувати можна тільки множники. У інших дробах викреслюється доданок.'},
+  {q:'Чому дорівнює ~b−a~?',o:['~−(a−b)~','~a−b~','~a+b~','~−(a+b)~'],c:0,why:'Дзеркальні дужки відрізняються знаком.',hint:'Підстав числа: a=5, b=2. Тоді b−a=−3, а a−b=3.'}
+ ]},
+
+{id:'t1',nav:'№1. Ціле чи дробове',title:'Завдання №1. Ціле чи дробове?',
+ task:`<span class="t0">Які з виразів є цілими, а які — дробовими?</span><span class="it">1) ~{{1|3}}a^2b~;</span><span class="it">2) ~{{x−y|x}}~;</span><span class="it">3) ~{{c+2|9}}~;</span><span class="it">4) ~p^2−p−19~</span>`,
+ idea:`<p>Дивись лише на <b>знаменник</b>, тобто на те, що під рискою.</p>
+<ul class="bul"><li>Під рискою <b>тільки число</b> (або взагалі немає риски) — вираз <b>цілий</b>.</li><li>Під рискою є <b>літера</b> — вираз <b>дробовий</b>.</li></ul>
+<p>Чисельник (те, що над рискою) тут не важливий.</p>`,
+ steps:[
+  `Вираз 1) ~{{1|3}}a^2b~. Під рискою лише число 3. Ділити на число можна — це те саме, що множити на ~{{1|3}}~. Отже, <b>цілий</b>.`,
+  `Вираз 2) ~{{x−y|x}}~. Під рискою літера ~x~. Отже, <b>дробовий</b>.`,
+  `Вираз 3) ~{{c+2|9}}~. Під рискою лише число 9, а літера ~c~ стоїть у чисельнику. Отже, <b>цілий</b>.`,
+  `Вираз 4) ~p^2−p−19~. Рисок немає зовсім. Отже, <b>цілий</b>.`
+ ],
+ answer:`Цілі: 1), 3), 4). Дробовий: 2).`,
+ widgets:[{t:'Тренажер: цілий чи дробовий?',f:wClassify}],
+ mistake:`Вираз ~{{c+2|9}}~ <b>виглядає</b> як дріб, але літери під рискою немає, тож він цілий.`,
+ practice:[
+  {q:'Який із виразів дробовий?',o:['~{{x|3}}y~','~{{a+b|7}}~','~{{5|a−1}}~','~m^2−4~'],c:2,why:'Літера ~a~ стоїть під рискою.',hint:'Шукай літеру саме під рискою.'},
+  {q:'Вираз ~{{m^2−n|4}}~ — це…',o:['цілий','дробовий'],c:0,why:'Під рискою лише число 4.',hint:'Що стоїть під рискою: число чи літера?'}
+ ]},
+
+{id:'t2',nav:'№2. Скорочення (прості)',title:'Завдання №2. Скорочуємо дріб',
+ task:`<span class="t0">Скоротіть дріб:</span><span class="it">1) ~{{m^2|mn}}~;</span><span class="it">2) ~{{4ab|4bc}}~.</span>`,
+ idea:`<p>Скоротити дріб — значить <b>поділити чисельник і знаменник на одне й те саме</b>. На практиці: розпиши все на множники й викресли однакові зверху та знизу.</p>`,
+ steps:[
+  `Розписуємо ~m^2~ як ~m·m~. Дріб став таким: ~{{m·m|m·n}}~.`,
+  `Викреслюємо однакові множники: ~m~ зверху й ~m~ знизу.`,
+  `Лишилось ~{{m|n}}~. Це відповідь до 1).`,
+  `У 2) ~{{4·a·b|4·b·c}}~ викреслюємо ~4~ і ~b~. Лишилось ~{{a|c}}~.`
+ ],
+ answer:`1) ~{{m|n}}~; 2) ~{{a|c}}~.`,
+ widgets:[{t:'Скорочувалка: клацай на однакові множники',f:()=>wCancel([
+  {label:'№2.1',raw:'{{m^2|mn}}',factor:'~m^2~ — це ~m·m~',num:['m','m'],den:['m','n']},
+  {label:'№2.2',raw:'{{4ab|4bc}}',factor:null,num:['4','a','b'],den:['4','b','c']}
+ ])}],
+ mistake:`Якщо скоротилось усе, у чисельнику лишається <b>1</b>, а не 0. Наприклад, ~{{ab|ab}}=1~.`,
+ practice:[
+  {q:'Скоротіть ~{{6xy|9yz}}~',o:['~{{2x|3z}}~','~{{2x|3}}~','~{{2xy|3z}}~','~{{x|z}}~'],c:0,why:'Скоротили ~3~ (6=3·2, 9=3·3) і ~y~.',hint:'Числа 6 і 9 діляться на 3, а літера y є зверху й знизу.'},
+  {q:'Скоротіть ~{{ab^2|a^2b}}~',o:['~{{b|a}}~','~{{a|b}}~','~{{b^2|a^2}}~','1'],c:0,why:'~{{a·b·b|a·a·b}}~: скорочуємо ~a~ і ~b~, лишається ~{{b|a}}~.',hint:'Розпиши: ~ab^2=a·b·b~, ~a^2b=a·a·b~.'}
+ ]},
+
+{id:'t3',nav:'№3. Додавання дробів',title:'Завдання №3. Додаємо й віднімаємо дроби',
+ task:`<span class="t0">Виконайте дію:</span><span class="it">1) ~{{a−b|n}}+{{b|n}}~;</span><span class="it">2) ~{{x|2}}−{{3|y}}~.</span>`,
+ idea:`<p>Однакові знаменники: додаємо чисельники, а <b>знаменник не чіпаємо</b>.</p><p>Різні знаменники: спочатку зводимо до спільного знаменника.</p>`,
+ steps:[
+  `1) Знаменники однакові (~n~). Пишемо один знаменник, чисельники додаємо: ~{{(a−b)+b|n}}~.`,
+  `Розкриваємо дужки: ~a−b+b=a~ (мінус ~b~ і плюс ~b~ знищили одне одного). Відповідь: ~{{a|n}}~.`,
+  `2) ~{{x|2}}−{{3|y}}~. Знаменники різні: ~2~ і ~y~. Спільний знаменник — їх добуток ~2y~.`,
+  `Додатковий множник до першого дробу — ~y~ (бо ~2·y=2y~), до другого — ~2~ (бо ~y·2=2y~). Множимо і чисельник, і знаменник: ~{{x·y|2·y}}−{{3·2|y·2}}~.`,
+  `Тепер знаменники однакові: ~{{xy−6|2y}}~. Це відповідь.`
+ ],
+ answer:`1) ~{{a|n}}~; 2) ~{{xy−6|2y}}~.`,
+ widgets:[
+  {t:'Смужка з n клітинок: двигай повзунки',f:wBars},
+  {t:'Перевір №3.2 числами: підстав x і y',f:()=>wVerify({vars:[{n:'x',min:-6,max:6,v:4},{n:'y',min:-6,max:6,v:3}],rows:[
+    {t:'Початковий вираз ~{{x|2}}−{{3|y}}~',f:v=>D(v.x,2)-D(3,v.y)},
+    {t:'Відповідь ~{{xy−6|2y}}~',f:v=>D(v.x*v.y-6,2*v.y)}]})}
+ ],
+ mistake:`Знаменник при додаванні <b>не додається</b>: ~{{1|5}}+{{2|5}}={{3|5}}~, а не ~{{3|10}}~.`,
+ practice:[
+  {q:'~{{x+1|5}}+{{x−2|5}}=~',o:['~{{2x−1|5}}~','~{{2x−1|10}}~','~{{2x+3|5}}~','~{{2x−3|5}}~'],c:0,why:'Знаменник 5 лишається, а ~(x+1)+(x−2)=2x−1~.',hint:'Знаменники однакові: додаємо тільки чисельники.'},
+  {q:'~{{1|a}}−{{1|b}}=~',o:['~{{b−a|ab}}~','~{{a−b|ab}}~','~{{1|ab}}~','~{{0|a+b}}~'],c:0,why:'Спільний знаменник ~ab~: ~{{b|ab}}−{{a|ab}}={{b−a|ab}}~.',hint:'Спільний знаменник ~ab~. Першу дріб множимо на ~b~, другу на ~a~.'}
+ ]},
+
+{id:'t4',nav:'№4. Допустимі значення',title:'Завдання №4. Які значення літери допустимі?',
+ task:`<span class="t0">Знайдіть допустимі значення змінної у виразі:</span><span class="it">1) ~{{5|x(x−1)}}~;</span><span class="it">2) ~{{2a|a+2}}+{{1|a−3}}~.</span>`,
+ idea:`<p><b>Допустимі значення</b> — це ті значення літери, при яких вираз існує. А він не існує, коли <b>знаменник дорівнює 0</b>.</p><p>Рецепт: кожен множник знаменника прирівняй до нуля. Ці значення заборонені.</p>`,
+ steps:[
+  `1) Знаменник ~x(x−1)~. Добуток дорівнює 0, коли нулю дорівнює один із множників: ~x=0~ або ~x−1=0~, тобто ~x=1~.`,
+  `Заборонені значення — 0 і 1. Відповідь: ~x≠0~ і ~x≠1~.`,
+  `2) Тут два дроби, і в кожного свій знаменник. У першого ~a+2=0~, тобто ~a=−2~. У другого ~a−3=0~, тобто ~a=3~.`,
+  `Заборонені значення з обох дробів збираємо разом.`
+ ],
+ answer:`1) ~x≠0~ і ~x≠1~; 2) ~a≠−2~ і ~a≠3~.`,
+ widgets:[
+  {t:'№4.1. Рухай x по прямій і дивись на знаменник',f:()=>wLine({lo:-6,hi:6,start:3,dens:[{t:'x',f:x=>x},{t:'x−1',f:x=>x-1}],forb:[0,1]})},
+  {t:'№4.2. Тут два знаменники',f:()=>wLine({lo:-6,hi:6,start:1,dens:[{t:'a+2',f:x=>x+2},{t:'a−3',f:x=>x-3}],forb:[-2,3]})}
+ ],
+ mistake:`Чисельник на допустимі значення <b>не впливає</b>. У ~{{5|x(x−1)}}~ дивимось тільки на низ дробу.`,
+ practice:[
+  {q:'Допустимі значення виразу ~{{7|x(x+3)}}~',o:['~x≠0~ і ~x≠−3~','~x≠0~ і ~x≠3~','~x≠−3~','~x≠0~'],c:0,why:'~x=0~ або ~x+3=0~, тобто ~x=−3~.',hint:'Прирівняй кожен множник знаменника до 0.'},
+  {q:'Допустимі значення ~{{x|x−5}}+{{3|x+1}}~',o:['~x≠5~ і ~x≠−1~','~x≠−5~ і ~x≠1~','~x≠5~','~x≠5~ і ~x≠1~'],c:0,why:'~x−5=0~ дає ~x=5~, а ~x+1=0~ дає ~x=−1~.',hint:'У кожного дробу свій знаменник. Розв’яжи ~x−5=0~ і ~x+1=0~.'}
+ ]},
+
+{id:'t5',nav:'№5. Скорочення з формулами',title:'Завдання №5. Скорочуємо складніші дроби',
+ task:`<span class="t0">Скоротіть дріб:</span><span class="it">1) ~{{16am|20bm}}~;</span><span class="it">2) ~{{12am^2|8mc}}~;</span><span class="it">3) ~{{2m−6|m^2−9}}~;</span><span class="it">4) ~{{ax+2a|x^2+4x+4}}~.</span>`,
+ idea:`<p>Алгоритм із двох кроків: <b>1) розкласти на множники, 2) скоротити</b>. Допомагають формули зі «Старту»: винесення за дужку, різниця квадратів, квадрат суми.</p>`,
+ steps:[
+  `1) ~{{16am|20bm}}~. Числа діляться на 4 (~16=4·4~, ~20=4·5~), а ~m~ є зверху й знизу. Лишилось ~{{4a|5b}}~.`,
+  `2) ~{{12am^2|8mc}}~. Числа діляться на 4 (~12=4·3~, ~8=4·2~). Ще ~m^2=m·m~, і одну ~m~ скорочуємо з ~m~ знизу. Лишилось ~{{3am|2c}}~.`,
+  `3) ~{{2m−6|m^2−9}}~. Зверху виносимо 2: ~2m−6=2(m−3)~. Знизу різниця квадратів: ~m^2−9=(m−3)(m+3)~.`,
+  `Скорочуємо дужку ~(m−3)~: ~{{2(m−3)|(m−3)(m+3)}}={{2|m+3}}~.`,
+  `4) ~{{ax+2a|x^2+4x+4}}~. Зверху виносимо ~a~: ~a(x+2)~. Знизу квадрат суми: ~x^2+4x+4=(x+2)^2~.`,
+  `Скорочуємо один множник ~(x+2)~: ~{{a(x+2)|(x+2)(x+2)}}={{a|x+2}}~.`
+ ],
+ answer:`1) ~{{4a|5b}}~; 2) ~{{3am|2c}}~; 3) ~{{2|m+3}}~; 4) ~{{a|x+2}}~.`,
+ widgets:[{t:'Скорочувалка: усі чотири дроби',f:()=>wCancel([
+  {label:'№5.1',raw:'{{16am|20bm}}',factor:'~16=4·4~, ~20=4·5~',num:['4','4','a','m'],den:['4','5','b','m']},
+  {label:'№5.2',raw:'{{12am^2|8mc}}',factor:'~12=4·3~, ~8=4·2~, ~m^2=m·m~',num:['4','3','a','m','m'],den:['4','2','m','c']},
+  {label:'№5.3',raw:'{{2m−6|m^2−9}}',factor:'~2m−6=2(m−3)~ і ~m^2−9=(m−3)(m+3)~',num:['2','(m−3)'],den:['(m−3)','(m+3)']},
+  {label:'№5.4',raw:'{{ax+2a|x^2+4x+4}}',factor:'~ax+2a=a(x+2)~ і ~x^2+4x+4=(x+2)(x+2)~',num:['a','(x+2)'],den:['(x+2)','(x+2)']}
+ ])}],
+ mistake:`Не можна «скоротити» ~m~ у ~{{2m−6|m^2−9}}~: там ~m~ — доданок, а не множник. Спочатку розкладай, потім скорочуй.`,
+ practice:[
+  {q:'Скоротіть ~{{x^2−25|x−5}}~',o:['~x+5~','~x−5~','~x^2−5~','5'],c:0,why:'~x^2−25=(x−5)(x+5)~, дужку ~(x−5)~ скорочуємо.',hint:'Розклади чисельник за формулою різниці квадратів.'},
+  {q:'Скоротіть ~{{3x+6|x^2−4}}~',o:['~{{3|x−2}}~','~{{3|x+2}}~','~{{3|x−4}}~','~{{x+2|x−2}}~'],c:0,why:'~3x+6=3(x+2)~, ~x^2−4=(x−2)(x+2)~. Скоротили ~(x+2)~.',hint:'Зверху виносимо 3, знизу різниця квадратів.'}
+ ]},
+
+{id:'t6',nav:'№6. Різні знаменники',title:'Завдання №6. Додаємо дроби з різними знаменниками',
+ task:`<span class="t0">Виконайте дію:</span><span class="it">1) ~{{3a|a−b}}+{{3b|b−a}}~;</span><span class="it">2) ~{{5x+y|x^2y}}+{{x−5y|xy^2}}~.</span>`,
+ idea:`<p>У 1) знаменники <b>дзеркальні</b>: ~a−b~ і ~b−a~. Вони відрізняються лише знаком: ~b−a=−(a−b)~. Це дозволяє зробити знаменники однаковими.</p><p>У 2) шукаємо спільний знаменник: кожна літера береться в найбільшому степені.</p>`,
+ steps:[
+  `1) Перетворимо другий дріб: ~b−a=−(a−b)~, тому ~{{3b|b−a}}=−{{3b|a−b}}~.`,
+  `Тепер знаменники однакові: ~{{3a|a−b}}−{{3b|a−b}}={{3a−3b|a−b}}~.`,
+  `Виносимо 3 за дужку і скорочуємо: ~{{3(a−b)|a−b}}=3~. Відповідь: 3.`,
+  `2) Знаменники ~x^2y~ і ~xy^2~. Спільний знаменник — ~x^2y^2~.`,
+  `Додатковий множник до першого дробу — ~y~ (бо ~x^2y·y=x^2y^2~), до другого — ~x~ (бо ~xy^2·x=x^2y^2~).`,
+  `Чисельник: ~(5x+y)·y+(x−5y)·x=5xy+y^2+x^2−5xy=x^2+y^2~. Доданки ~5xy~ і ~−5xy~ знищили одне одного.`,
+  `Відповідь: ~{{x^2+y^2|x^2y^2}}~. Скорочувати нічого: зверху сума.`
+ ],
+ answer:`1) 3; 2) ~{{x^2+y^2|x^2y^2}}~.`,
+ widgets:[
+  {t:'Дзеркальні дужки: двигай a і b',f:()=>wVerify({vars:[{n:'a',min:-6,max:6,v:5},{n:'b',min:-6,max:6,v:2}],rows:[
+    {t:'~a−b~',f:v=>v.a-v.b},{t:'~b−a~',f:v=>v.b-v.a}],
+    verdict:r=>Math.abs(r[0]+r[1])<1e-9?['ok','Числа протилежні, тож ~b−a=−(a−b)~ ✓'.replace(/~([^~]+)~/g,(_,m)=>T('~'+m+'~'))]:['bad','Щось не так.']})},
+  {t:'Перевір №6.1 числами',f:()=>wVerify({vars:[{n:'a',min:-6,max:8,v:5},{n:'b',min:-6,max:8,v:2}],rows:[
+    {t:'Початковий вираз',f:v=>D(3*v.a,v.a-v.b)+D(3*v.b,v.b-v.a)},{t:'Відповідь 3',f:()=>3}]})},
+  {t:'Перевір №6.2 числами',f:()=>wVerify({vars:[{n:'x',min:-5,max:5,v:1},{n:'y',min:-5,max:5,v:2}],rows:[
+    {t:'Початковий вираз',f:v=>D(5*v.x+v.y,v.x*v.x*v.y)+D(v.x-5*v.y,v.x*v.y*v.y)},
+    {t:'Відповідь ~{{x^2+y^2|x^2y^2}}~',f:v=>D(v.x*v.x+v.y*v.y,v.x*v.x*v.y*v.y)}]})}
+ ],
+ mistake:`Знак! ~{{3b|b−a}}~ — це <b>мінус</b> ~{{3b|a−b}}~. Забудеш мінус — вийде ~{{3a+3b|a−b}}~, а це неправильно.`,
+ practice:[
+  {q:'~{{2a|a−3}}+{{6|3−a}}=~',o:['2','−2','~{{2a+6|a−3}}~','~{{2a−6|3−a}}~'],c:0,why:'~{{6|3−a}}=−{{6|a−3}}~, далі ~{{2a−6|a−3}}={{2(a−3)|a−3}}=2~.',hint:'Перетвори ~3−a~ на ~−(a−3)~.'},
+  {q:'~{{1|x}}+{{1|y}}=~',o:['~{{x+y|xy}}~','~{{2|x+y}}~','~{{1|xy}}~','~{{2|xy}}~'],c:0,why:'Спільний знаменник ~xy~: ~{{y|xy}}+{{x|xy}}~.',hint:'Спільний знаменник ~xy~.'}
+ ]},
+
+{id:'t7',nav:'№7. Три дроби',title:'Завдання №7. Спрощуємо суму трьох дробів',
+ task:`<span class="t0">Спростіть вираз</span> ~{{2b|b−4}}+{{b|b+4}}+{{2b^2|16−b^2}}~`,
+ idea:`<p>Метод той самий: знайти спільний знаменник. Спочатку розклади всі знаменники на множники й прибери «дзеркало».</p>`,
+ steps:[
+  `Розкладаємо третій знаменник: ~16−b^2=(4−b)(4+b)~. Щоб ~4−b~ став схожим на ~b−4~, виносимо мінус: ~4−b=−(b−4)~. Тому ~16−b^2=−(b−4)(b+4)~.`,
+  `Третій дріб: ~{{2b^2|16−b^2}}=−{{2b^2|(b−4)(b+4)}}~.`,
+  `Знаменники: ~(b−4)~, ~(b+4)~ і ~(b−4)(b+4)~. Спільний знаменник — ~(b−4)(b+4)~.`,
+  `Додаткові множники: до першого дробу ~(b+4)~, до другого ~(b−4)~, до третього нічого (там усе вже є).`,
+  `Чисельник: ~2b(b+4)+b(b−4)−2b^2=2b^2+8b+b^2−4b−2b^2=b^2+4b~.`,
+  `~b^2+4b=b(b+4)~. Тоді ~{{b(b+4)|(b−4)(b+4)}}={{b|b−4}}~, бо скоротили ~(b+4)~.`
+ ],
+ answer:`~{{b|b−4}}~.`,
+ widgets:[{t:'Перевір числами: підстав b',f:()=>wVerify({vars:[{n:'b',min:-8,max:8,v:2}],rows:[
+   {t:'Початковий вираз',f:v=>D(2*v.b,v.b-4)+D(v.b,v.b+4)+D(2*v.b*v.b,16-v.b*v.b)},
+   {t:'Відповідь ~{{b|b−4}}~',f:v=>D(v.b,v.b-4)}]})}],
+ mistake:`Мінус перед третім дробом легко загубити. Пам’ятай: ~16−b^2~ — це <b>не</b> ~b^2−16~, вони протилежні.`,
+ practice:[
+  {q:'Розкладіть ~16−b^2~',o:['~(4−b)(4+b)~','~(b−4)(b+4)~','~(4−b)^2~','~(4+b)^2~'],c:0,why:'Різниця квадратів: ~4^2−b^2=(4−b)(4+b)~.',hint:'~16=4^2~. Формула ~a^2−b^2=(a−b)(a+b)~.'},
+  {q:'~{{1|a−1}}+{{1|a+1}}+{{2|1−a^2}}=~',o:['~{{2|a+1}}~','~{{2|a−1}}~','~{{4|a^2−1}}~','~{{2a|a^2−1}}~'],c:0,why:'~1−a^2=−(a−1)(a+1)~. Чисельник: ~(a+1)+(a−1)−2=2a−2=2(a−1)~, скорочуємо ~(a−1)~.',hint:'~1−a^2=−(a−1)(a+1)~. Спільний знаменник ~(a−1)(a+1)~.'}
+ ]},
+
+{id:'t8',nav:'№8. Ціла частина',title:'Завдання №8. Виділяємо цілу частину',
+ task:`<span class="t0">Подайте дріб у вигляді суми або різниці цілого виразу і дробу:</span><span class="it">1) ~{{c^2−c^3+5|c^2}}~;</span><span class="it">2) ~{{p^2−p−2|p−1}}~.</span>`,
+ idea:`<p>Тут навпаки: треба <b>розбити</b> дріб на частини. Як у числах: ~{{17|5}}=3+{{2|5}}~, тобто 3 цілих і 2 п’ятих.</p>`,
+ steps:[
+  `1) Ділимо кожен доданок чисельника на ~c^2~: ~{{c^2|c^2}}−{{c^3|c^2}}+{{5|c^2}}~.`,
+  `~{{c^2|c^2}}=1~, ~{{c^3|c^2}}=c~ (степені віднімаємо: 3−2=1). Відповідь: ~1−c+{{5|c^2}}~.`,
+  `2) ~{{p^2−p−2|p−1}}~. Знаменник — не одночлен, тому в чисельнику шукаємо частину, що ділиться на ~(p−1)~. Це ~p^2−p=p(p−1)~.`,
+  `Пишемо ~p^2−p−2=p(p−1)−2~. Розбиваємо: ~{{p(p−1)|p−1}}−{{2|p−1}}~.`,
+  `Перший дріб скорочуємо: ~p−{{2|p−1}}~. Це й відповідь.`
+ ],
+ answer:`1) ~1−c+{{5|c^2}}~; 2) ~p−{{2|p−1}}~.`,
+ widgets:[
+  {t:'Перевір №8.1 числами',f:()=>wVerify({vars:[{n:'c',min:-6,max:6,v:2}],rows:[
+    {t:'Початковий вираз',f:v=>D(v.c*v.c-Math.pow(v.c,3)+5,v.c*v.c)},
+    {t:'Відповідь ~1−c+{{5|c^2}}~',f:v=>1-v.c+D(5,v.c*v.c)}]})},
+  {t:'Перевір №8.2 числами',f:()=>wVerify({vars:[{n:'p',min:-6,max:6,v:3}],rows:[
+    {t:'Початковий вираз',f:v=>D(v.p*v.p-v.p-2,v.p-1)},
+    {t:'Відповідь ~p−{{2|p−1}}~',f:v=>v.p-D(2,v.p-1)}]})}
+ ],
+ mistake:`~{{c^3|c^2}}=c~, а не ~c^5~: при діленні степені <b>віднімаються</b>, а не додаються.`,
+ practice:[
+  {q:'Подайте ~{{x^2+3|x^2}}~ як суму',o:['1+~{{3|x^2}}~','~{{3|x^2}}~','~x+{{3|x}}~','1+3~x^2~'],c:0,why:'~{{x^2|x^2}}=1~, ~{{3|x^2}}~ лишається.',hint:'Поділи кожен доданок чисельника на ~x^2~.'},
+  {q:'Подайте ~{{x^2+2x+5|x+2}}~ як суму',o:['~x+{{5|x+2}}~','~x+5~','~x+{{5|x}}~','~x^2+{{5|x+2}}~'],c:0,why:'~x^2+2x=x(x+2)~, тож ~{{x(x+2)|x+2}}=x~, і лишається ~{{5|x+2}}~.',hint:'Винеси ~x~ з ~x^2+2x~.'}
+ ]},
+
+{id:'t9',nav:'№9. Графік',title:'Завдання №9. Будуємо графік',
+ task:`<span class="t0">Побудуйте графік функції</span> ~y={{x^2−4x|16−4x}}~.`,
+ idea:`<p>Графік дробу будуємо у три кроки: <b>1) знайти, що заборонено, 2) спростити, 3) побудувати й виколоти заборонену точку</b>.</p>`,
+ steps:[
+  `Знаменник ~16−4x~ не може дорівнювати 0: ~16−4x=0~ дає ~x=4~. Отже, ~x≠4~. Запам’ятай це!`,
+  `Розкладаємо: ~x^2−4x=x(x−4)~ і ~16−4x=−4(x−4)~ (перевір: ~−4·x=−4x~, ~−4·(−4)=16~).`,
+  `Скорочуємо ~(x−4)~: ~y={{x(x−4)|−4(x−4)}}={{x|−4}}=−{{x|4}}~.`,
+  `Графік — пряма ~y=−{{x|4}}~. Беремо зручні точки: ~x=0~, ~y=0~; ~x=−4~, ~y=1~; ~x=8~, ~y=−2~.`,
+  `При ~x=4~ на прямій ~y=−1~. Але ~x=4~ заборонено, тому точку ~(4; −1)~ <b>виколюємо</b>: малюємо порожнє кільце.`
+ ],
+ answer:`Пряма ~y=−{{x|4}}~ з виколотою точкою ~(4; −1)~.`,
+ widgets:[{t:'Рухай точку по графіку й підійди до x = 4',f:wGraph}],
+ mistake:`Якщо забути виколоти точку, відповідь неповна: у точці ~x=4~ функції не існує.`,
+ practice:[
+  {q:'Що є графіком ~y={{x^2−2x|x−2}}~?',o:['пряма ~y=x~ з виколотою точкою ~(2; 2)~','парабола','пряма ~y=x~ без виколотих точок','пряма ~y=x−2~'],c:0,why:'~{{x(x−2)|x−2}}=x~ при ~x≠2~. Точка ~(2; 2)~ виколота.',hint:'Розклади чисельник: ~x^2−2x=x(x−2)~. Не забудь, що ~x≠2~.'},
+  {q:'Чому в задачі №9 точка ~(4; −1)~ виколота?',o:['при ~x=4~ знаменник дорівнює 0','так гарніше виглядає','~y~ не може дорівнювати −1','при ~x=4~ чисельник дорівнює 1'],c:0,why:'На нуль ділити не можна, тож ~x=4~ не входить в область визначення.',hint:'Згадай перший крок розв’язання.'}
+ ]},
+
+{id:'t10',nav:'№10. Модуль у знаменнику',title:'Завдання №10. Дріб із модулем',
+ task:`<span class="t0">Знайдіть:</span><span class="it">1) область визначення виразу ~{{x^2−16||x+1|−5}}~;</span><span class="it">2) значення ~x~, для яких дріб ~{{x^2−16||x+1|−5}}~ дорівнює нулю.</span>`,
+ idea:`<p>Модуль ~|x+1|~ — це <b>відстань</b> від ~x~ до числа ~−1~ на числовій прямій. Умова ~|x+1|=5~ означає: відстань дорівнює 5.</p><p>Дріб дорівнює нулю, коли <b>чисельник = 0, а знаменник ≠ 0</b>.</p>`,
+ steps:[
+  `1) Знаменник не дорівнює 0: ~|x+1|−5≠0~, тобто ~|x+1|≠5~.`,
+  `Відстань від ~x~ до ~−1~ дорівнює 5 у двох точках: праворуч ~−1+5=4~ і ліворуч ~−1−5=−6~. Ці точки заборонені.`,
+  `Те саме алгеброю: ~x+1=5~ дає ~x=4~, а ~x+1=−5~ дає ~x=−6~.`,
+  `Відповідь 1): усі числа, крім ~4~ і ~−6~.`,
+  `2) Чисельник дорівнює нулю: ~x^2−16=0~, тоді ~x^2=16~, тобто ~x=4~ або ~x=−4~.`,
+  `Але ~x=4~ заборонене (див. пункт 1), тому відкидаємо його. Перевіряємо ~x=−4~: ~|−4+1|−5=3−5=−2≠0~ ✓. Відповідь 2): ~x=−4~.`
+ ],
+ answer:`1) ~x≠4~ і ~x≠−6~; 2) ~x=−4~.`,
+ widgets:[{t:'Модуль як відстань: двигай x, дивись на оранжеву дугу',f:()=>wLine({lo:-9,hi:9,start:0,center:-1,dens:[{t:'|x+1|−5',f:x=>Math.abs(x+1)-5}],numer:{t:'x^2−16',f:x=>x*x-16},forb:[4,-6]})}],
+ mistake:`Корені чисельника обов’язково <b>перевіряй</b> на допустимість. Тут один із двох коренів (4) зайвий.`,
+ practice:[
+  {q:'Область визначення ~{{1||x−2|−3}}~',o:['~x≠5~ і ~x≠−1~','~x≠5~','~x≠1~ і ~x≠−1~','~x≠3~ і ~x≠−3~'],c:0,why:'~|x−2|≠3~, тож ~x−2≠3~ (~x≠5~) і ~x−2≠−3~ (~x≠−1~).',hint:'Відстань від ~x~ до 2 не повинна дорівнювати 3.'},
+  {q:'Коли дріб дорівнює нулю?',o:['чисельник = 0 і знаменник ≠ 0','знаменник = 0','завжди, коли чисельник = 0','коли обидва = 0'],c:0,why:'Якщо знаменник 0, дріб не існує. Тому треба ще й перевірити знаменник.',hint:'Згадай правило про ділення на нуль.'}
+ ]},
+
+{id:'t11',nav:'№11. Складний приклад',title:'Завдання №11. Фінальне завдання',
+ task:`<span class="t0">Спростіть вираз</span> ~{{3(a−2b)|(a−3)(b−4)}}−{{a^2−6b|(3−a)(4−b)}}~`,
+ idea:`<p>Складається з уже знайомих кроків: дзеркальні дужки, однакові знаменники, віднімання (<b>з дужками!</b>), скорочення.</p>`,
+ steps:[
+  `Дивимось на знаменники: ~(a−3)(b−4)~ і ~(3−a)(4−b)~. Кожна дужка в другому — «дзеркало»: ~3−a=−(a−3)~ і ~4−b=−(b−4)~.`,
+  `Два мінуси дають плюс: ~(3−a)(4−b)=(a−3)(b−4)~. Знаменники <b>однакові</b>!`,
+  `Віднімаємо: ~{{3(a−2b)−(a^2−6b)|(a−3)(b−4)}}~. Перед дужкою мінус, тому знаки всередині змінюємо.`,
+  `Чисельник: ~3a−6b−a^2+6b=3a−a^2~ (~−6b~ і ~+6b~ знищились).`,
+  `Виносимо ~a~: ~3a−a^2=a(3−a)=−a(a−3)~.`,
+  `Скорочуємо ~(a−3)~: ~{{−a(a−3)|(a−3)(b−4)}}=−{{a|b−4}}~. Можна записати й так: ~{{a|4−b}}~.`
+ ],
+ answer:`~−{{a|b−4}}~, або те саме ~{{a|4−b}}~.`,
+ widgets:[
+  {t:'Два мінуси дають плюс: перевір знаменники',f:()=>wVerify({vars:[{n:'a',min:-6,max:8,v:1},{n:'b',min:-6,max:8,v:2}],rows:[
+    {t:'~(3−a)(4−b)~',f:v=>(3-v.a)*(4-v.b)},{t:'~(a−3)(b−4)~',f:v=>(v.a-3)*(v.b-4)}]})},
+  {t:'Перевір відповідь числами',f:()=>wVerify({vars:[{n:'a',min:-6,max:8,v:1},{n:'b',min:-6,max:8,v:2}],rows:[
+    {t:'Початковий вираз',f:v=>D(3*(v.a-2*v.b),(v.a-3)*(v.b-4))-D(v.a*v.a-6*v.b,(3-v.a)*(4-v.b))},
+    {t:'Відповідь ~−{{a|b−4}}~',f:v=>D(-v.a,v.b-4)}]})}
+ ],
+ mistake:`Мінус перед дужкою: ~−(a^2−6b)=−a^2+6b~. Якщо не змінити знаки, чисельник вийде неправильним.`,
+ practice:[
+  {q:'~(3−a)(4−b)=~',o:['~(a−3)(b−4)~','~−(a−3)(b−4)~','~(a−3)(4−b)~','~(a+3)(b+4)~'],c:0,why:'Змінюємо знак у двох дужках одразу, і мінуси скорочуються.',hint:'~3−a=−(a−3)~ і ~4−b=−(b−4)~. Перемнож два мінуси.'},
+  {q:'~{{5|x−2}}−{{x+3|2−x}}=~',o:['~{{x+8|x−2}}~','~{{2−x|x−2}}~','~{{x+2|x−2}}~','~{{x+8|2−x}}~'],c:0,why:'~−{{x+3|2−x}}=+{{x+3|x−2}}~, тоді ~{{5+x+3|x−2}}~.',hint:'Заміни ~2−x~ на ~−(x−2)~ і подивись на знак перед дробом.'}
+ ]},
+
+{id:'key',nav:'Відповіді (для вчителя)',title:'Ключ: відповіді до всіх завдань',noProg:true,
+ idea:`<table class="key">
+<tr><td>№1</td><td>цілі: 1), 3), 4); дробовий: 2)</td></tr>
+<tr><td>№2</td><td>1) ~{{m|n}}~; 2) ~{{a|c}}~</td></tr>
+<tr><td>№3</td><td>1) ~{{a|n}}~; 2) ~{{xy−6|2y}}~</td></tr>
+<tr><td>№4</td><td>1) ~x≠0~, ~x≠1~; 2) ~a≠−2~, ~a≠3~</td></tr>
+<tr><td>№5</td><td>1) ~{{4a|5b}}~; 2) ~{{3am|2c}}~; 3) ~{{2|m+3}}~; 4) ~{{a|x+2}}~</td></tr>
+<tr><td>№6</td><td>1) 3; 2) ~{{x^2+y^2|x^2y^2}}~</td></tr>
+<tr><td>№7</td><td>~{{b|b−4}}~</td></tr>
+<tr><td>№8</td><td>1) ~1−c+{{5|c^2}}~; 2) ~p−{{2|p−1}}~</td></tr>
+<tr><td>№9</td><td>пряма ~y=−{{x|4}}~, точка ~(4; −1)~ виколота</td></tr>
+<tr><td>№10</td><td>1) ~x≠4~, ~x≠−6~; 2) ~x=−4~</td></tr>
+<tr><td>№11</td><td>~−{{a|b−4}}={{a|4−b}}~</td></tr>
+</table>`,steps:[],widgets:[],practice:[]}
+];
+
+/* ================= RENDER ================= */
+const total=LESSONS.filter(l=>!l.noProg).length;
+function updateProg(){
+  const n=LESSONS.filter(l=>!l.noProg&&prog[l.id]).length;
+  $('#barfill').style.width=(n/total*100)+'%';
+  $('#ptxt').textContent=n+' з '+total+' пройдено';
+  document.querySelectorAll('nav button').forEach(b=>{b.querySelector('.ck').textContent=prog[b.dataset.id]?'✓':'';});
+}
+function buildNav(){
+  const nav=$('#nav');nav.innerHTML='';
+  LESSONS.forEach(l=>{
+    const b=el('button','');b.dataset.id=l.id;
+    b.append(el('span','',l.nav),el('span','ck',''));
+    b.onclick=()=>show(l.id);nav.append(b);
+  });
+}
+function show(id){
+  const idx=LESSONS.findIndex(l=>l.id===id),L=LESSONS[idx];
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.id===id));
+  const main=$('#main');main.innerHTML='';
+  const sh=el('article','sheet');main.append(sh);
+  sh.append(el('h2','',L.title));
+  if(L.task)sh.append(el('div','task',T(L.task)));
+  sh.append(el('h3','',L.noProg?'Ключ':'Суть'));
+  sh.append(el('div','',T(L.idea)));
+
+  if(L.steps.length){
+    sh.append(el('h3','','Розбираємо крок за кроком'));
+    const ol=el('ol','steps');
+    L.steps.forEach((s,i)=>ol.append(el('li','step'+(i?' hid':''),T(s))));
+    sh.append(ol);
+    const ans=el('div','answer','<b>Відповідь:</b> '+T(L.answer||''));ans.style.display='none';
+    let shown=1;
+    const nb=el('button','btn',''),all=el('button','btn ghost','Показати все одразу');
+    const upd=()=>{
+      if(shown>=L.steps.length){nb.style.display=all.style.display='none';if(L.answer)ans.style.display='block';}
+      else nb.textContent='Показати наступний крок ('+shown+' з '+L.steps.length+')';
+    };
+    nb.onclick=()=>{const li=ol.children[shown];li.classList.remove('hid');li.classList.add('fresh');shown++;upd();};
+    all.onclick=()=>{[...ol.children].forEach(li=>li.classList.remove('hid'));shown=L.steps.length;upd();};
+    sh.append(nb,all,ans);upd();
+  }
+  if(L.widgets&&L.widgets.length){
+    sh.append(el('h3','','Побач на власні очі'));
+    L.widgets.forEach(w=>{const v=el('div','viz');v.append(el('div','vt',T(w.t)),w.f());sh.append(v);});
+  }
+  if(L.mistake){
+    sh.append(el('h3','','Типова помилка'));
+    sh.append(el('div','callout err',T(L.mistake)));
+  }
+  if(L.practice.length){
+    sh.append(el('h3','','Спробуй сам'));
+    const solved=new Set();
+    L.practice.forEach((q,qi)=>{
+      const card=el('div','q');card.append(el('div','qt',T(q.q)));
+      const list=el('div','opts'),fb=el('div','fb');
+      shuffle(q.o.map((t,i)=>({t,i}))).forEach(op=>{
+        const b=el('button','opt',T(op.t));
+        b.onclick=()=>{
+          if(solved.has(qi))return;
+          if(op.i===q.c){
+            b.classList.add('good');fb.className='fb good';fb.innerHTML='✓ Правильно! '+T(q.why);
+            solved.add(qi);
+            if(solved.size===L.practice.length){prog[L.id]=true;saveProg();updateProg();}
+          }else{
+            b.classList.add('bad');b.disabled=true;fb.className='fb bad';fb.innerHTML='Ще ні. '+T(q.hint);
+          }
+        };
+        list.append(b);
+      });
+      card.append(list,fb);sh.append(card);
+    });
+  }
+  const nx=LESSONS[idx+1];
+  if(nx){
+    const row=el('div','nextrow');
+    const b=el('button','btn','Далі: '+nx.nav);b.onclick=()=>show(nx.id);row.append(b);sh.append(row);
+  }
+  window.scrollTo(0,0);
+}
+buildNav();updateProg();show('start');
+</script>
+</body>
+</html>
